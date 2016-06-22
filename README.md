@@ -10,6 +10,6 @@ _{This repository contains sample application attached to it which follows the b
 `user1.display = "SampleDisplay_1";`  
 `user1.username = "UserName.09.sample";`  
 `String output;`  
-*Call Enrol User Function  
+* Call Enrol User Function  
 `output = user1.EnrolUser();`  
-*Enjoy :-)
+* Enjoy :-)
