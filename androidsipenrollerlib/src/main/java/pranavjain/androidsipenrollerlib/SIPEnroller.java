@@ -1,9 +1,13 @@
 package pranavjain.androidsipenrollerlib;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.os.StrictMode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xml.sax.InputSource;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -11,6 +15,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,7 +41,7 @@ public class SIPEnroller {
         //Fetch whether enrollment has been success or not
         JSONObject jsnobject = new JSONObject(p1);
         return jsnobject.getString("success");
-    } //Called by Enrolment
+    }
 
     public void Enrolment() throws IOException, JSONException {
         //POST request for user Enrolment
@@ -68,29 +73,26 @@ public class SIPEnroller {
 
         status = Result(responseOutput.toString());
 
-    } //Calls FindProivderID + ParseResult
+    }
 
 
-    public String EnrolUser() throws IOException, JSONException {
-       //Fetches XML from Server
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        URL url1 = new URL("http://richardveronica.com/test.xml");
-        HttpURLConnection connection1 = (HttpURLConnection) url1.openConnection();
-        connection1.setRequestMethod("POST");
-        connection1.setDoOutput(true);
-        BufferedReader br1 = new BufferedReader(new InputStreamReader(connection1.getInputStream()));
-        String line1 = "";
-        StringBuilder responseOutput1 = new StringBuilder();
-        while ((line1 = br1.readLine()) != null) {
-            responseOutput1.append(line1);
+    public String EnrolUser(Context AppContext) throws IOException, JSONException {
+        //Fetches XML from Assests Folder
+        try {
+            InputStream SIPStream = AppContext.getAssets().open("ProviderData.xml");
+            int length = SIPStream.available();
+            byte[] data = new byte[length];
+            SIPStream.read(data);
+            String xml = new String(data);
+            //Calls XML Parsing function
+            DoParse(xml);
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
-        br1.close();
-        String xml = responseOutput1.toString();
-        //Calls XML Parsing function
-        DoParse(xml);
+
+
         return status;
-    } //Calls DoParse
+    }
 
     public void DoParse(String xml) throws IOException, JSONException {
         //Take Fetched XML as input and find relevant tags from it
@@ -173,7 +175,7 @@ public class SIPEnroller {
 
         FindProviderID();
 
-    } //Called by FetchXML
+    }
 
     public void FindProviderID() throws IOException, JSONException {
         //Conver provider to providerID
@@ -183,7 +185,9 @@ public class SIPEnroller {
                 break;
             }
         }
-    Enrolment();
+        Enrolment();
 
-    } //Called by Enrolment
+    }
+
+
 }
