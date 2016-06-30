@@ -11,7 +11,7 @@ _{This repository contains sample application attached to it which follows the b
 `user1.username = "UserName.09.sample";`  
 `String output;`  
 * Call Enrol User Function  
-`output = user1.EnrolUser();`  
+`output = user1.EnrolUser(getApplicationContext());`  
 * Enjoy :-)
 
 ## License  
