@@ -13,3 +13,6 @@ _{This repository contains sample application attached to it which follows the b
 * Call Enrol User Function  
 `output = user1.EnrolUser();`  
 * Enjoy :-)
+
+## License  
+See the [LICENSE](LICENSE.md) file for license rights and limitations (LGPL).
